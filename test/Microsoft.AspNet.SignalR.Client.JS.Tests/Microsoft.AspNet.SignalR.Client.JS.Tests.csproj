@@ -23,6 +23,7 @@
     <MSBuildCommunityTasksPath Condition="$(MSBuildCommunityTasksPath) == ''">..\Build</MSBuildCommunityTasksPath>
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
+    <RuntimeIdentifiers>win</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,7 +49,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Owin.Cors" Version="$(MicrosoftOwinCorsPackageVersion)" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="$(MicrosoftOwinHostSystemWebPackageVersion)" />
-
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -160,12 +160,10 @@
   <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-
     <!-- Use ProgramFiles32 instead of MSBuildExtensionsPath so we can be built with dotnet.exe -->
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(VSINSTALLDIR)\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../Microsoft.AspNet.SignalR.Tests.Common/Microsoft.AspNet.SignalR.Tests.Common.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.AspNet.SignalR.Core\Microsoft.AspNet.SignalR.Core.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

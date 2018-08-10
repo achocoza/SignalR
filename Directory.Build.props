@@ -26,11 +26,11 @@
     <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)build\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
 
-    <!-- The key doesn't have the private part with it, so PublicSign when building locally and DelaySign when building for CI -->
-    <PublicSign Condition="'$(CI)' != 'true'">true</PublicSign>
+    <!-- The key doesn't have the private part with it, so we DelaySign when building for CI -->
     <DelaySign Condition="'$(CI)' == 'true'">true</DelaySign>
+    <SignAssembly Condition="'$(CI)' == 'true'">true</SignAssembly>
+    <DefineConstants Condition="'$(CI)' == 'true'">$(DefineConstants);SIGNED</DefineConstants>
 
-    <SignAssembly>true</SignAssembly>
     <AssemblySigningCertName>Microsoft</AssemblySigningCertName>
     <PackageSigningCertName>MicrosoftNuGet</PackageSigningCertName>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
