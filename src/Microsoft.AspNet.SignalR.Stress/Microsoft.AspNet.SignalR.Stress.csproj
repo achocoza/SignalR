@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <DefineConstants>$(DefineConstants);SERVER</DefineConstants>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>$(DefaultTestFrameworks)</TargetFrameworks>
   </PropertyGroup>
   <Choose>
     <When Condition="'$(PerfRun)'=='True'">
