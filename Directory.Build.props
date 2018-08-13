@@ -40,6 +40,9 @@
 
   <!-- Locating Visual Studio -->
   <PropertyGroup Condition="'$(VsInstallRoot)' == ''">
-    <VsInstallRoot Condition="'$(VSINSTALLDIR)' != '' And Exists('$(VSINSTALLDIR)')">$(VSINSTALLDIR)</VsInstallRoot>
+    <_Vs2017InstallDir>$(MSBuildProgramFiles32)Microsoft Visual Studio\2017\Enterprise\</Vs2017InstallDir>
+
+    <VsInstallRoot Condition="'$(VsInstallRoot)' == '' And '$(VSINSTALLDIR)' != '' And Exists('$(VSINSTALLDIR)')">$(VSINSTALLDIR)</VsInstallRoot>
+    <VsInstallRoot Condition="'$(VsInstallRoot)' == '' And Exists('$(_VstsVsInstallDir)')'">$(_Vs2017InstallDir)</VsInstallRoot>
   </PropertyGroup>
 </Project>
