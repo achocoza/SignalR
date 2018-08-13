@@ -15,3 +15,10 @@ phases:
   parameters:
     agentOs: Windows
     buildArgs: /bl:artifacts/build/msbuild.binlog
+    afterBuild:
+    - task: PublishBuildArtifacts@1
+      displayName: Upload artifacts
+      inputs:
+        pathtoPublish: 'artifacts/build'
+        artifactName: artifacts-$(AgentOsName)-$(BuildConfiguration)
+        artifactType: Container
