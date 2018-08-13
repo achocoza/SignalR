@@ -14,14 +14,3 @@ phases:
 - template: .vsts-pipelines/templates/phases/default-build.yml@buildtools
   parameters:
     agentOs: Windows
-    buildArgs: /bl:artifacts/build/msbuild.binlog
-    artifacts:
-      publish: false
-    afterBuild:
-    - task: PublishBuildArtifacts@1
-      displayName: Upload artifacts for real
-      condition: always()
-      inputs:
-        pathtoPublish: 'artifacts/build'
-        artifactName: artifacts-$(AgentOsName)-$(BuildConfiguration)
-        artifactType: Container
