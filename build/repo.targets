@@ -1,2 +1,8 @@
 <Project>
+    <PropertyGroup>
+        <PrepareDependsOn>DisableStrongNameVerification;$(PrepareDependsOn)</PrepareDependsOn>
+    </PropertyGroup>
+    <Target Name="DisableStrongNameVerification" Condition="'$(CI)' == 'true'">
+        <Exec Command="sn -Vr *,31bf3856ad364e35" />
+    </Target>
 </Project>
