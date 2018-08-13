@@ -37,4 +37,9 @@
     <LangVersion>latest</LangVersion>
     <DefaultTestFrameworks>net461</DefaultTestFrameworks>
   </PropertyGroup>
+
+  <!-- Locating Visual Studio -->
+  <PropertyGroup Condition="'$(VsInstallRoot)' == ''">
+    <VsInstallRoot Condition="'$(VSINSTALLDIR)' != '' And Exists('$(VSINSTALLDIR)')">$(VSINSTALLDIR)</VsInstallRoot>
+  </PropertyGroup>
 </Project>
