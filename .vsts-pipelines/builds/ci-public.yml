@@ -15,9 +15,11 @@ phases:
   parameters:
     agentOs: Windows
     buildArgs: /bl:artifacts/build/msbuild.binlog
+    artifacts:
+      publish: false
     afterBuild:
     - task: PublishBuildArtifacts@1
-      displayName: Upload artifacts
+      displayName: Upload artifacts for real
       inputs:
         pathtoPublish: 'artifacts/build'
         artifactName: artifacts-$(AgentOsName)-$(BuildConfiguration)
