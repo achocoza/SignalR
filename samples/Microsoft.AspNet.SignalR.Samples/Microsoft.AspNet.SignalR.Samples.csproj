@@ -400,12 +400,6 @@
   <ItemGroup>
     <Content Include="SignalR.Master" />
   </ItemGroup>
-  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT'">
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-
-    <!-- Use ProgramFiles32 instead of MSBuildExtensionsPath so we can be built with dotnet.exe -->
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(VsInstallRoot)\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="..\..\.nuget\NuGet.targets" />

@@ -36,6 +36,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>latest</LangVersion>
     <DefaultTestFrameworks>net461</DefaultTestFrameworks>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
   </PropertyGroup>
 
   <!-- Locating Visual Studio -->
@@ -44,5 +45,8 @@
 
     <VsInstallRoot Condition="'$(VsInstallRoot)' == '' And '$(VSINSTALLDIR)' != '' And Exists('$(VSINSTALLDIR)')">$(VSINSTALLDIR)</VsInstallRoot>
     <VsInstallRoot Condition="'$(VsInstallRoot)' == '' And Exists('$(_VstsVsInstallDir)')">$(_Vs2017InstallDir)</VsInstallRoot>
+
+    <!-- Use ProgramFiles32 instead of MSBuildExtensionsPath so we can be built with dotnet.exe -->
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(VsInstallRoot)\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
 </Project>
