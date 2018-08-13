@@ -47,6 +47,6 @@
     <VsInstallRoot Condition="'$(VsInstallRoot)' == '' And Exists('$(_VstsVsInstallDir)')">$(_Vs2017InstallDir)</VsInstallRoot>
 
     <!-- Use ProgramFiles32 instead of MSBuildExtensionsPath so we can be built with dotnet.exe -->
-    <WAPToolsPath Condition="'$(WAPToolsPath)' == ''">$(VsInstallRoot)\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <WAPToolsPath Condition="'$(WAPToolsPath)' == ''">$(VsInstallRoot)\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)</WAPToolsPath>
   </PropertyGroup>
 </Project>
