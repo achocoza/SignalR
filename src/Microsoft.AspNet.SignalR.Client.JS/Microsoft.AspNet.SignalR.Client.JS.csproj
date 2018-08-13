@@ -7,7 +7,7 @@
   <ItemGroup>
     <JSCompile Include="jquery.signalr.*.js" />
   </ItemGroup>
-  <Target Name="BuildJs" BeforeTargets="Build" Inputs="@(JSCompile)" Outputs="$(OutDir)jquery.signalR.js;$(OutDir)jquery.signalR.min.js">
+  <Target Name="BeforeBuild" Inputs="@(JSCompile)" Outputs="$(OutDir)jquery.signalR.js;$(OutDir)jquery.signalR.min.js">
      <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass .\build.ps1 $(OutputPath)" 
            WorkingDirectory="$(ProjectDir)"
            Condition=" '$(OS)' == 'Windows_NT'" />
