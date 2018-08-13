@@ -43,6 +43,6 @@
     <_Vs2017InstallDir>$(MSBuildProgramFiles32)Microsoft Visual Studio\2017\Enterprise\</_Vs2017InstallDir>
 
     <VsInstallRoot Condition="'$(VsInstallRoot)' == '' And '$(VSINSTALLDIR)' != '' And Exists('$(VSINSTALLDIR)')">$(VSINSTALLDIR)</VsInstallRoot>
-    <VsInstallRoot Condition="'$(VsInstallRoot)' == '' And Exists('$(_VstsVsInstallDir)')'">$(_Vs2017InstallDir)</VsInstallRoot>
+    <VsInstallRoot Condition="'$(VsInstallRoot)' == '' And Exists('$(_VstsVsInstallDir)')">$(_Vs2017InstallDir)</VsInstallRoot>
   </PropertyGroup>
 </Project>
