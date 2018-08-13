@@ -15,5 +15,5 @@ phases:
   parameters:
     agentOs: Windows
     beforeBuild:
-      - script: sn -Vr *,31bf3856ad364e35
-        displayName: Disable Strong Name Verification for 35MSSharedLib1024 key
+      - script: ./build/disable-strong-name-verification.cmd
+        displayName: "Disable Strong Name Verification for 35MSSharedLib1024 key"
