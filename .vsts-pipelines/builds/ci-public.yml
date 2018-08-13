@@ -20,6 +20,7 @@ phases:
     afterBuild:
     - task: PublishBuildArtifacts@1
       displayName: Upload artifacts for real
+      condition: always()
       inputs:
         pathtoPublish: 'artifacts/build'
         artifactName: artifacts-$(AgentOsName)-$(BuildConfiguration)
