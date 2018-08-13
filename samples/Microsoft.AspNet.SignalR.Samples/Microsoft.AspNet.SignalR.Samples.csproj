@@ -430,7 +430,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Target Name="BeforeBuild">
+  <Target Name="CopyJs" AfterTargets="Build">
     <Copy SourceFiles="..\..\src\Microsoft.AspNet.SignalR.Client.JS\bin\$(Configuration)\netstandard1.0\jquery.signalR.js" DestinationFiles="Scripts\jquery.signalR.js" />
     <Copy SourceFiles="..\..\src\Microsoft.AspNet.SignalR.Client.JS\bin\$(Configuration)\netstandard1.0\jquery.signalR.min.js" DestinationFiles="Scripts\jquery.signalR.min.js" />
   </Target>
