@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.AspNet.SignalR.Infrastructure
@@ -17,10 +18,15 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
 
         public static async Task OrTimeout(this Task task, TimeSpan timeout)
         {
+            var cts = new CancellationTokenSource();
             var completed = await Task.WhenAny(task, Task.Delay(timeout));
             if (completed != task)
             {
                 throw new TimeoutException();
+            }
+            else
+            {
+                cts.Cancel();
             }
 
             await task;
@@ -33,10 +39,15 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
 
         public static async Task<T> OrTimeout<T>(this Task<T> task, TimeSpan timeout)
         {
-            var completed = await Task.WhenAny(task, Task.Delay(timeout));
+            var cts = new CancellationTokenSource();
+            var completed = await Task.WhenAny(task, Task.Delay(timeout, cts.Token));
             if (completed != task)
             {
                 throw new TimeoutException();
+            }
+            else
+            {
+                cts.Cancel();
             }
 
             return await task;

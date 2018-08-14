@@ -114,7 +114,7 @@ namespace Microsoft.AspNet.SignalR.Client.Tests
         }
 
         [Fact]
-        public void CancelledTaskHandledinLongPollingLoop()
+        public async Task CancelledTaskHandledinLongPollingLoop()
         {
             var mockConnection = new Mock<IConnection>();
             mockConnection.Setup(c => c.TotalTransportConnectTimeout).Returns(TimeSpan.FromSeconds(1500));
@@ -122,7 +122,7 @@ namespace Microsoft.AspNet.SignalR.Client.Tests
             var tcs = new TaskCompletionSource<IResponse>();
             tcs.SetCanceled();
 
-            var onErrorWh = new ManualResetEvent(false);
+            var onErrorWh = new TaskCompletionSource<object>();
 
             var mockHttpClient = new Mock<IHttpClient>();
             mockHttpClient.Setup(c => c.Post(It.IsAny<string>(),
@@ -131,11 +131,11 @@ namespace Microsoft.AspNet.SignalR.Client.Tests
 
             var mockLongPollingTransport = new Mock<LongPollingTransport>(mockHttpClient.Object) { CallBase = true };
             mockLongPollingTransport.Setup(t => t.OnError(It.IsAny<IConnection>(), It.IsAny<Exception>()))
-                .Callback(() => onErrorWh.Set());
+                .Callback(() => onErrorWh.TrySetResult(null));
 
             mockLongPollingTransport.Object.StartPolling(mockConnection.Object, string.Empty);
 
-            Assert.True(onErrorWh.WaitOne(TimeSpan.FromSeconds(2)));
+            await onErrorWh.Task.OrTimeout();
 
             mockLongPollingTransport
                 .Verify(

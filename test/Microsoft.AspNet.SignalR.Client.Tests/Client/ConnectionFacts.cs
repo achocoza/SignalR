@@ -1,4 +1,4 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -373,11 +373,11 @@ namespace Microsoft.AspNet.SignalR.Client.Tests
         }
 
         [Fact]
-        public void OnReconnectingRaisesOnErrorIfReconnectingTimesOut()
+        public async Task OnReconnectingRaisesOnErrorIfReconnectingTimesOut()
         {
             using (var connection = new Connection("http://fakeurl"))
             {
-                var errorCalledResetEvent = new ManualResetEventSlim();
+                var errorCalledResetEvent = new TaskCompletionSource<object>();
 
                 connection.Error += error =>
                 {
@@ -386,12 +386,12 @@ namespace Microsoft.AspNet.SignalR.Client.Tests
                         string.Format(CultureInfo.CurrentCulture, Resources.Error_ReconnectTimeout, new TimeSpan(0)),
                         error.Message);
 
-                    errorCalledResetEvent.Set();
+                    errorCalledResetEvent.TrySetResult(null);
                 };
 
                 connection.OnReconnecting();
 
-                Assert.True(errorCalledResetEvent.Wait(1000), "OnError not called");
+                await errorCalledResetEvent.Task.OrTimeout();
             }
         }
 

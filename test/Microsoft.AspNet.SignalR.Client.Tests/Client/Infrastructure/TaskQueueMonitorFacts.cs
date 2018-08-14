@@ -1,9 +1,11 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Globalization;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using Moq;
 using Xunit;
 
@@ -93,17 +95,17 @@ namespace Microsoft.AspNet.SignalR.Client.Infrastructure
         }
 
         [Fact]
-        public void ErrorsAreTriggeredByTimer()
+        public async Task ErrorsAreTriggeredByTimer()
         {
             var mockConnection = new Mock<IConnection>();
-            var wh = new ManualResetEventSlim();
+            var wh = new TaskCompletionSource<object>();
 
-            mockConnection.Setup(c => c.OnError(It.IsAny<SlowCallbackException>())).Callback(wh.Set);
+            mockConnection.Setup(c => c.OnError(It.IsAny<SlowCallbackException>())).Callback(() => wh.TrySetResult(null));
 
             using (var monitor = new TaskQueueMonitor(mockConnection.Object, TimeSpan.FromMilliseconds(100)))
             {
                 monitor.TaskStarted();
-                Assert.True(wh.Wait(TimeSpan.FromMilliseconds(500)));
+                await wh.Task.OrTimeout();
             };
         }
 

@@ -1,4 +1,4 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 
@@ -18,7 +18,7 @@ namespace Microsoft.AspNet.SignalR.Client.Transports
     public class AutoTransportFacts
     {
         [Fact]
-        public void AutoTransportDoesNotTryAnotherTransportIfTransportFailsDuringStartRequest()
+        public async Task AutoTransportDoesNotTryAnotherTransportIfTransportFailsDuringStartRequest()
         {
             var mockConnection = new Mock<IConnection>();
             mockConnection.Setup(c => c.TotalTransportConnectTimeout).Returns(TimeSpan.FromSeconds(5));
@@ -52,12 +52,9 @@ namespace Microsoft.AspNet.SignalR.Client.Transports
             var autoTransport = new AutoTransport(mockHttpClient.Object,
                 new List<IClientTransport> {mockFailingTransport.Object, mockTransport.Object});
 
-            var startException =
-                Assert.Throws<AggregateException>(() =>
-                    autoTransport.Start(mockConnection.Object, string.Empty, CancellationToken.None)
-                        .Wait(TimeSpan.FromSeconds(1))).InnerException;
+            var startException = await Assert.ThrowsAsync<StartException>(
+                async () => await autoTransport.Start(mockConnection.Object, string.Empty, CancellationToken.None));
 
-            Assert.IsType<StartException>(startException);
             Assert.Same(exception, startException.InnerException);
 
             mockTransport.Verify(

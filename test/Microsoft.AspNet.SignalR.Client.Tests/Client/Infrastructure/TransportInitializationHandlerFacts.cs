@@ -1,4 +1,4 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 
@@ -36,7 +36,7 @@ namespace Microsoft.AspNet.SignalR.Client.Infrastructure
             initHandler.InitReceived();
 
             mockTransportHelper.Verify(
-                h => h.GetStartResponse(It.IsAny<IHttpClient>(), It.IsAny<IConnection>(), 
+                h => h.GetStartResponse(It.IsAny<IHttpClient>(), It.IsAny<IConnection>(),
                     It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
 
@@ -68,7 +68,7 @@ namespace Microsoft.AspNet.SignalR.Client.Infrastructure
 
             initHandler.InitReceived();
 
-            var startException = 
+            Exception startException =
                 Assert.Throws<AggregateException>(
                     () => Assert.True(initHandler.Task.Wait(TimeSpan.FromSeconds(1)))).InnerException;
 
@@ -96,7 +96,7 @@ namespace Microsoft.AspNet.SignalR.Client.Infrastructure
 
             var initHandler = new TransportInitializationHandler(Mock.Of<IHttpClient>(), mockConnection.Object,
                 string.Empty, "fakeTransport", CancellationToken.None, mockTransportHelper.Object);
-            var onFailureInvoked = false;  
+            var onFailureInvoked = false;
             initHandler.OnFailure += () => onFailureInvoked = true;
 
             initHandler.InitReceived();
@@ -106,7 +106,7 @@ namespace Microsoft.AspNet.SignalR.Client.Infrastructure
         }
 
         [Fact]
-        public void InitTaskThrowsStartFailedExceptionIfStartRequestThrows()
+        public async Task InitTaskThrowsStartFailedExceptionIfStartRequestThrows()
         {
             var mockTransportHelper = new Mock<TransportHelper>();
             var mockConnection = new Mock<IConnection>();
@@ -134,11 +134,8 @@ namespace Microsoft.AspNet.SignalR.Client.Infrastructure
 
             initHandler.InitReceived();
 
-            var startException =
-                Assert.Throws<AggregateException>(
-                    () => Assert.True(initHandler.Task.Wait(TimeSpan.FromSeconds(1)))).InnerException;
+            var startException = await Assert.ThrowsAsync<StartException>(async () => await initHandler.Task);
 
-            Assert.IsType<StartException>(startException);
             // startException.InnerException is an AggregateException
             Assert.Same(exception, startException.InnerException.InnerException);
             Assert.True(onFailureInvoked);
@@ -162,7 +159,7 @@ namespace Microsoft.AspNet.SignalR.Client.Infrastructure
                 h => h.GetStartResponse(It.IsAny<IHttpClient>(), It.IsAny<IConnection>(),
                     It.IsAny<string>(), It.IsAny<string>()))
                 .Returns<IHttpClient, IConnection, string, string>(
-                    (httpClient, connection, connectionData, transport) 
+                    (httpClient, connection, connectionData, transport)
                         => Task.FromResult("{ \"foo\" : \"bar\" }"));
 
             initHandler.InitReceived();
@@ -218,13 +215,13 @@ namespace Microsoft.AspNet.SignalR.Client.Infrastructure
 
             cancellationTokenSource.Cancel();
 
-            var exception =
+            Exception exception =
                 Assert.Throws<AggregateException>(
                     () => initHandler.Task.Wait(TimeSpan.FromSeconds(1))).InnerException;
 
             Assert.IsType<OperationCanceledException>(exception);
             Assert.Equal(Resources.Error_ConnectionCancelled, exception.Message);
-            Assert.Equal(cancellationTokenSource.Token, ((OperationCanceledException) exception).CancellationToken);
+            Assert.Equal(cancellationTokenSource.Token, ((OperationCanceledException)exception).CancellationToken);
 
             Assert.True(onFailureInvoked);
         }
