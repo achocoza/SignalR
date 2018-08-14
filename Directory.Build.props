@@ -38,6 +38,9 @@
     <LangVersion>latest</LangVersion>
     <DefaultTestFrameworks>net461</DefaultTestFrameworks>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+
+    <!-- Disable warning about SemVer 2.0 versions -->
+    <NoWarn>NU5105</NoWarn>
   </PropertyGroup>
 
   <!-- Locating Visual Studio -->
