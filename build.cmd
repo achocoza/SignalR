@@ -1,5 +1,6 @@
 @ECHO OFF
 
+C:
 cd \
 dir /s sn.exe
 
